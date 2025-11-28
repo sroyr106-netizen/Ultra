@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Student Dashboard - AI Attendance System">
+    <title>Student Dashboard | AI Attendance System</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .dashboard-container {
+            padding: 6rem 5% 3rem;
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-subtitle {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.2rem;
+        }
+
+        /* Profile Card */
+        .profile-section {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .profile-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(178, 75, 243, 0.3);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            text-align: center;
+            box-shadow: var(--glow-purple);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--gradient-primary);
+        }
+
+        .profile-avatar {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 1.5rem;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: #ffffff;
+            box-shadow: var(--glow-multi);
+            animation: profilePulse 3s ease-in-out infinite;
+        }
+
+        @keyframes profilePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .profile-name {
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-primary);
+        }
+
+        .profile-id {
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .profile-details {
+            text-align: left;
+            margin-top: 2rem;
+        }
+
+        .detail-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .detail-icon {
+            color: var(--neon-purple);
+            font-size: 1.2rem;
+        }
+
+        .detail-text {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Quick Stats */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        .quick-stat-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .quick-stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--glow-blue);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .stat-value-large {
+            font-size: 2.5rem;
+            font-family: var(--font-primary);
+            font-weight: 700;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label-small {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        /* Attendance Timeline */
+        .attendance-section {
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--neon-cyan);
+            margin-bottom: 2rem;
+            font-family: var(--font-primary);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .section-icon {
+            font-size: 2rem;
+            color: var(--neon-purple);
+        }
+
+        .timeline {
+            position: relative;
+            padding-left: 3rem;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 20px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: var(--gradient-primary);
+            opacity: 0.3;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .timeline-item:hover {
+            transform: translateX(10px);
+            box-shadow: var(--glow-multi);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -3rem;
+            top: 2rem;
+            width: 15px;
+            height: 15px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            box-shadow: var(--glow-blue);
+            z-index: 1;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            left: -2.7rem;
+            top: 2rem;
+            width: 8px;
+            height: 3px;
+            background: var(--neon-blue);
+            z-index: 2;
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .timeline-subject {
+            font-size: 1.3rem;
+            color: var(--neon-cyan);
+            font-weight: 600;
+        }
+
+        .timeline-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.2rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .status-present {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 1px solid #00ff88;
+        }
+
+        .status-absent {
+            background: rgba(255, 0, 110, 0.2);
+            color: var(--neon-pink);
+            border: 1px solid var(--neon-pink);
+        }
+
+        .status-late {
+            background: rgba(255, 200, 0, 0.2);
+            color: #ffc800;
+            border: 1px solid #ffc800;
+        }
+
+        .timeline-details {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .timeline-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .timeline-detail i {
+            color: var(--neon-purple);
+        }
+
+        /* Charts Section */
+        .charts-section {
+            margin-top: 3rem;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .chart-card {
+            background: var(--bg-glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-lg);
+            padding: 2rem;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-title {
+            font-size: 1.4rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            font-family: var(--font-primary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 100px;
+            right: 30px;
+            background: var(--gradient-primary);
+            border: none;
+            padding: 0.8rem 1.2rem;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            box-shadow: var(--glow-blue);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            box-shadow: var(--glow-multi);
+        }
+
+        .theme-toggle i {
+            color: #ffffff;
+            font-size: 1.2rem;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 1rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-family: var(--font-primary);
+            font-weight: 600;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: var(--glow-blue);
+        }
+
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--glow-multi);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .profile-section {
+                grid-template-columns: 1fr;
+            }
+
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .timeline {
+                padding-left: 2rem;
+            }
+
+            .theme-toggle {
+                right: 20px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span>STUDENT PORTAL</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="navbar-link"><i class="fas fa-home"></i> Home</a></li>
+            <li><a href="#" onclick="logout()" class="navbar-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+        </ul>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Dashboard Container -->
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="dashboard-header">
+            <h1 class="welcome-title">WELCOME BACK</h1>
+            <p class="welcome-subtitle">Track your attendance and academic progress</p>
+        </div>
+
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <!-- Profile Card -->
+            <div class="profile-card">
+                <div class="profile-avatar">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 class="profile-name">Rahul Sharma</h2>
+                <p class="profile-id">Roll No: 001 | Class 12-A</p>
+
+                <div class="profile-details">
+                    <div class="detail-item">
+                        <i class="fas fa-envelope detail-icon"></i>
+                        <span class="detail-text">rahul.sharma@school.com</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-phone detail-icon"></i>
+                        <span class="detail-text">+91 9876543210</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-building detail-icon"></i>
+                        <span class="detail-text">Science Department</span>
+                    </div>
+                    <div class="detail-item">
+                        <i class="fas fa-calendar detail-icon"></i>
+                        <span class="detail-text">Enrolled: 2023</span>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="action-btn"><i class="fas fa-cog"></i> Settings</button>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="quick-stats">
+                <div class="quick-stat-card">
+                    <div class="stat-value-large">92%</div>
+                    <div class="stat-label-small">Overall Attendance</div>
+                </div>
+                <div class="quick-stat-card">
+                    <div class="stat-value-large">85</div>
+                    <div class="stat-label-small">Total Classes</div>
+                </div>
+                <div class="quick-stat-card">
+                    <div class="stat-value-large">78</div>
+                    <div class="stat-label-small">Classes Attended</div>
+                </div>
+                <div class="quick-stat-card">
+                    <div class="stat-value-large">7</div>
+                    <div class="stat-label-small">Classes Missed</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance Timeline -->
+        <div class="attendance-section">
+            <h2 class="section-title">
+                <i class="fas fa-history section-icon"></i>
+                ATTENDANCE HISTORY
+            </h2>
+
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-subject">Mathematics</h3>
+                        <span class="timeline-status status-present">
+                            <i class="fas fa-check-circle"></i> Present
+                        </span>
+                    </div>
+                    <div class="timeline-details">
+                        <div class="timeline-detail">
+                            <i class="fas fa-calendar"></i>
+                            <span>28 Nov 2025</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>09:00 AM - 10:00 AM</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-user"></i>
+                            <span>Prof. A. Kumar</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-subject">Physics</h3>
+                        <span class="timeline-status status-present">
+                            <i class="fas fa-check-circle"></i> Present
+                        </span>
+                    </div>
+                    <div class="timeline-details">
+                        <div class="timeline-detail">
+                            <i class="fas fa-calendar"></i>
+                            <span>28 Nov 2025</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>10:15 AM - 11:15 AM</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-user"></i>
+                            <span>Prof. S. Patel</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-subject">Chemistry</h3>
+                        <span class="timeline-status status-late">
+                            <i class="fas fa-exclamation-triangle"></i> Late
+                        </span>
+                    </div>
+                    <div class="timeline-details">
+                        <div class="timeline-detail">
+                            <i class="fas fa-calendar"></i>
+                            <span>27 Nov 2025</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>11:30 AM - 12:30 PM</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-user"></i>
+                            <span>Prof. R. Singh</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-subject">English</h3>
+                        <span class="timeline-status status-present">
+                            <i class="fas fa-check-circle"></i> Present
+                        </span>
+                    </div>
+                    <div class="timeline-details">
+                        <div class="timeline-detail">
+                            <i class="fas fa-calendar"></i>
+                            <span>27 Nov 2025</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>02:00 PM - 03:00 PM</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-user"></i>
+                            <span>Prof. M. Verma</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="timeline-item">
+                    <div class="timeline-header">
+                        <h3 class="timeline-subject">Computer Science</h3>
+                        <span class="timeline-status status-absent">
+                            <i class="fas fa-times-circle"></i> Absent
+                        </span>
+                    </div>
+                    <div class="timeline-details">
+                        <div class="timeline-detail">
+                            <i class="fas fa-calendar"></i>
+                            <span>26 Nov 2025</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-clock"></i>
+                            <span>10:00 AM - 11:00 AM</span>
+                        </div>
+                        <div class="timeline-detail">
+                            <i class="fas fa-user"></i>
+                            <span>Prof. N. Gupta</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+            <h2 class="section-title">
+                <i class="fas fa-chart-bar section-icon"></i>
+                ATTENDANCE ANALYTICS
+            </h2>
+
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-title">Monthly Attendance Trends</h3>
+                    <canvas id="monthlyChart"></canvas>
+                </div>
+
+                <div class="chart-card">
+                    <h3 class="chart-title">Subject-wise Attendance</h3>
+                    <canvas id="subjectChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
+    <h2 class="profile-name">Rahul Sharma</h2>
+    <p class="profile-id">Roll No: 001 | Class 12-A</p>
+
+    <div class="profile-details">
+        <div class="detail-item">
+            <i class="fas fa-envelope detail-icon"></i>
+            <span class="detail-text">rahul.sharma@school.com</span>
+        </div>
+        <div class="detail-item">
+            <i class="fas fa-phone detail-icon"></i>
+            <span class="detail-text">+91 9876543210</span>
+        </div>
+        <div class="detail-item">
+            <i class="fas fa-building detail-icon"></i>
+            <span class="detail-text">Science Department</span>
+        </div>
+        <div class="detail-item">
+            <i class="fas fa-calendar detail-icon"></i>
+            <span class="detail-text">Enrolled: 2023</span>
+        </div>
+    </div>
+
+    <div class="action-buttons">
+        <button class="action-btn"><i class="fas fa-cog"></i> Settings</button>
+    </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="quick-stats">
+        <div class="quick-stat-card">
+            <div class="stat-value-large">92%</div>
+            <div class="stat-label-small">Overall Attendance</div>
+        </div>
+        <div class="quick-stat-card">
+            <div class="stat-value-large">85</div>
+            <div class="stat-label-small">Total Classes</div>
+        </div>
+        <div class="quick-stat-card">
+            <div class="stat-value-large">78</div>
+            <div class="stat-label-small">Classes Attended</div>
+        </div>
+        <div class="quick-stat-card">
+            <div class="stat-value-large">7</div>
+            <div class="stat-label-small">Classes Missed</div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Attendance Timeline -->
+    <div class="attendance-section">
+        <h2 class="section-title">
+            <i class="fas fa-history section-icon"></i>
+            ATTENDANCE HISTORY
+        </h2>
+
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <h3 class="timeline-subject">Mathematics</h3>
+                    <span class="timeline-status status-present">
+                        <i class="fas fa-check-circle"></i> Present
+                    </span>
+                </div>
+                <div class="timeline-details">
+                    <div class="timeline-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>28 Nov 2025</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>09:00 AM - 10:00 AM</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-user"></i>
+                        <span>Prof. A. Kumar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <h3 class="timeline-subject">Physics</h3>
+                    <span class="timeline-status status-present">
+                        <i class="fas fa-check-circle"></i> Present
+                    </span>
+                </div>
+                <div class="timeline-details">
+                    <div class="timeline-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>28 Nov 2025</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>10:15 AM - 11:15 AM</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-user"></i>
+                        <span>Prof. S. Patel</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <h3 class="timeline-subject">Chemistry</h3>
+                    <span class="timeline-status status-late">
+                        <i class="fas fa-exclamation-triangle"></i> Late
+                    </span>
+                </div>
+                <div class="timeline-details">
+                    <div class="timeline-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>27 Nov 2025</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>11:30 AM - 12:30 PM</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-user"></i>
+                        <span>Prof. R. Singh</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <h3 class="timeline-subject">English</h3>
+                    <span class="timeline-status status-present">
+                        <i class="fas fa-check-circle"></i> Present
+                    </span>
+                </div>
+                <div class="timeline-details">
+                    <div class="timeline-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>27 Nov 2025</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>02:00 PM - 03:00 PM</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-user"></i>
+                        <span>Prof. M. Verma</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-header">
+                    <h3 class="timeline-subject">Computer Science</h3>
+                    <span class="timeline-status status-absent">
+                        <i class="fas fa-times-circle"></i> Absent
+                    </span>
+                </div>
+                <div class="timeline-details">
+                    <div class="timeline-detail">
+                        <i class="fas fa-calendar"></i>
+                        <span>26 Nov 2025</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-clock"></i>
+                        <span>10:00 AM - 11:00 AM</span>
+                    </div>
+                    <div class="timeline-detail">
+                        <i class="fas fa-user"></i>
+                        <span>Prof. N. Gupta</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="charts-section">
+        <h2 class="section-title">
+            <i class="fas fa-chart-bar section-icon"></i>
+            ATTENDANCE ANALYTICS
+        </h2>
+
+        <div class="charts-grid">
+            <div class="chart-card">
+                <h3 class="chart-title">Monthly Attendance Trends</h3>
+                <canvas id="monthlyChart"></canvas>
+            </div>
+
+            <div class="chart-card">
+                <h3 class="chart-title">Subject-wise Attendance</h3>
+                <canvas id="subjectChart"></canvas>
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Developed by <span>Satyajit Pratihar</span> | AI-Powered Attendance System © 2025</p>
+    </footer>
+
+    <!-- External Scripts -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+    <script src="student.js"></script>
+</body>
+
+</html>

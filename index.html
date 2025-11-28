@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Ultra-Futuristic AI-Powered Attendance System with Advanced Face Recognition">
+    <title>AI Attendance System | Futuristic Face Recognition Portal</title>
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Homepage Specific Styles */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 6rem 5% 4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-subtitle {
+            text-align: center;
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1rem;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        /* AI Face Scanner Section */
+        .face-scanner-section {
+            width: 100%;
+            max-width: 500px;
+            margin: 3rem auto;
+            animation: fadeInUp 1.4s ease;
+        }
+
+        .face-scanner-container {
+            position: relative;
+            background: var(--bg-glass);
+            backdrop-filter: blur(30px);
+            border: 2px solid rgba(0, 212, 255, 0.3);
+            border-radius: var(--radius-xl);
+            padding: 2rem;
+            box-shadow: var(--glow-multi);
+            animation: pulseGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+
+            0%,
+            100% {
+                box-shadow: var(--glow-blue);
+            }
+
+            50% {
+                box-shadow: var(--glow-multi);
+            }
+        }
+
+        .scanner-title {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--neon-cyan);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .ai-face-display {
+            width: 280px;
+            height: 280px;
+            margin: 0 auto 2rem;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .face-outer-ring {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border: 3px solid var(--neon-blue);
+            border-radius: 50%;
+            animation: rotateRing 4s linear infinite;
+            opacity: 0.6;
+        }
+
+        .face-middle-ring {
+            position: absolute;
+            width: 85%;
+            height: 85%;
+            border: 2px solid var(--neon-purple);
+            border-radius: 50%;
+            animation: rotateRing 3s linear infinite reverse;
+            opacity: 0.5;
+        }
+
+        .face-inner-ring {
+            position: absolute;
+            width: 70%;
+            height: 70%;
+            border: 2px solid var(--neon-pink);
+            border-radius: 50%;
+            animation: rotateRing 2s linear infinite;
+            opacity: 0.4;
+        }
+
+        @keyframes rotateRing {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .face-icon {
+            font-size: 7rem;
+            color: var(--neon-blue);
+            filter: drop-shadow(var(--glow-blue));
+            animation: facePulse 2s ease-in-out infinite;
+            z-index: 1;
+        }
+
+        @keyframes facePulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        .scanning-beam {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, transparent, var(--neon-cyan), transparent);
+            animation: scanBeam 2s ease-in-out infinite;
+            opacity: 0.8;
+        }
+
+        @keyframes scanBeam {
+            0% {
+                top: 0;
+            }
+
+            50% {
+                top: calc(100% - 4px);
+            }
+
+            100% {
+                top: 0;
+            }
+        }
+
+        .subject-selector {
+            margin-top: 1.5rem;
+        }
+
+        .subject-selector select {
+            width: 100%;
+            padding: 0.9rem;
+            background: rgba(0, 212, 255, 0.1);
+            border: 1px solid var(--neon-blue);
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-size: 1rem;
+            font-family: var(--font-secondary);
+            cursor: pointer;
+            transition: all var(--transition-normal);
+        }
+
+        .subject-selector select:focus {
+            outline: none;
+            box-shadow: var(--glow-blue);
+            background: rgba(0, 212, 255, 0.15);
+        }
+
+        .subject-selector option {
+            background: var(--bg-dark);
+            color: #ffffff;
+        }
+
+        .scan-button {
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-family: var(--font-primary);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--glow-multi);
+            transition: all var(--transition-normal);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .scan-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 40px rgba(0, 212, 255, 0.6), 0 0 80px rgba(178, 75, 243, 0.4);
+        }
+
+        /* Login Panels */
+        .login-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+            width: 100%;
+            max-width: 900px;
+            margin: 4rem auto 0;
+            animation: fadeInUp 1.6s ease;
+        }
+
+        .login-panel {
+            background: var(--bg-glass);
+            backdrop-filter: blur(25px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-xl);
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-normal);
+        }
+
+        .login-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-card);
+            opacity: 0;
+            transition: opacity var(--transition-normal);
+            z-index: -1;
+        }
+
+        .login-panel:hover::before {
+            opacity: 1;
+        }
+
+        .login-panel:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: var(--glow-multi);
+            border-color: rgba(0, 212, 255, 0.5);
+        }
+
+        .panel-icon {
+            font-size: 4rem;
+            color: var(--neon-blue);
+            text-align: center;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(var(--glow-blue));
+            animation: iconFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes iconFloat {
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .panel-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: var(--neon-cyan);
+            margin-bottom: 2rem;
+            font-family: var(--font-primary);
+        }
+
+        .panel-description {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: var(--radius-md);
+            color: #ffffff;
+            font-family: var(--font-primary);
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: var(--glow-blue);
+            transition: all var(--transition-normal);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+        }
+
+        .login-btn:hover {
+            transform: scale(1.05);
+            box-shadow: var(--glow-multi);
+        }
+
+        /* AI Chatbot */
+        .ai-chatbot {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--glow-multi);
+            z-index: 1000;
+            animation: chatbotPulse 2s ease-in-out infinite;
+            transition: all var(--transition-normal);
+        }
+
+        .ai-chatbot:hover {
+            transform: scale(1.15);
+        }
+
+        @keyframes chatbotPulse {
+
+            0%,
+            100% {
+                box-shadow: var(--glow-blue);
+            }
+
+            50% {
+                box-shadow: var(--glow-multi);
+                transform: scale(1.1);
+            }
+        }
+
+        .chatbot-icon {
+            font-size: 2rem;
+            color: #ffffff;
+        }
+
+        .chatbot-waves {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--neon-cyan);
+            opacity: 0;
+            animation: waveExpand 2s ease-out infinite;
+        }
+
+        .chatbot-waves:nth-child(2) {
+            animation-delay: 0.5s;
+        }
+
+        .chatbot-waves:nth-child(3) {
+            animation-delay: 1s;
+        }
+
+        @keyframes waveExpand {
+            0% {
+                transform: scale(1);
+                opacity: 0.6;
+            }
+
+            100% {
+                transform: scale(2);
+                opacity: 0;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .login-panels {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .hero-section {
+                padding: 5rem 5% 3rem;
+            }
+
+            .ai-chatbot {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+            }
+
+            .chatbot-icon {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="navbar-logo">
+            <span>AI ATTENDANCE</span>
+        </div>
+        <ul class="navbar-menu">
+            <li><a href="index.html" class="navbar-link">Home</a></li>
+            <li><a href="#features" class="navbar-link">Features</a></li>
+            <li><a href="#about" class="navbar-link">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <!-- Hero Title -->
+        <div class="hero-title">
+            <h1>AI-POWERED ATTENDANCE</h1>
+            <p class="hero-subtitle">Next-Generation Face Recognition System</p>
+        </div>
+
+        <!-- AI Face Scanner Section -->
+        <div class="face-scanner-section">
+            <div class="face-scanner-container">
+                <h3 class="scanner-title">
+                    <i class="fas fa-robot"></i>
+                    INSTANT AI FACE SCAN
+                </h3>
+
+                <div class="ai-face-display">
+                    <div class="face-outer-ring"></div>
+                    <div class="face-middle-ring"></div>
+                    <div class="face-inner-ring"></div>
+                    <i class="fas fa-user-circle face-icon"></i>
+                    <div class="scanning-beam"></div>
+                </div>
+
+                <div class="subject-selector">
+                    <label for="subject" class="input-label">
+                        <i class="fas fa-book"></i> Select Subject
+                    </label>
+                    <select id="subject" required>
+                        <option value="">Choose a subject...</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="physics">Physics</option>
+                        <option value="chemistry">Chemistry</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="biology">Biology</option>
+                        <option value="english">English</option>
+                        <option value="history">History</option>
+                    </select>
+                </div>
+
+                <button class="scan-button" onclick="initiateScanning()">
+                    <i class="fas fa-camera"></i> INITIATE SCAN
+                </button>
+            </div>
+        </div>
+
+        <!-- Login Panels -->
+        <div class="login-panels">
+            <!-- Admin Login Panel -->
+            <div class="login-panel">
+                <div class="panel-icon">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <h2 class="panel-title">ADMIN LOGIN</h2>
+                <p class="panel-description">
+                    Manage students, track attendance, generate reports, and control the entire system with advanced
+                    administrative privileges.
+                </p>
+                <a href="admin-login.html" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> ADMIN ACCESS
+                </a>
+            </div>
+
+            <!-- Student Login Panel -->
+            <div class="login-panel">
+                <div class="panel-icon">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <h2 class="panel-title">STUDENT LOGIN</h2>
+                <p class="panel-description">
+                    View your attendance records, track your progress, and access personalized analytics through your
+                    student portal.
+                </p>
+                <a href="student-login.html" class="login-btn">
+                    <i class="fas fa-sign-in-alt"></i> STUDENT ACCESS
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- AI Chatbot -->
+    <div class="ai-chatbot" onclick="toggleChatbot()">
+        <div class="chatbot-waves"></div>
+        <div class="chatbot-waves"></div>
+        <div class="chatbot-waves"></div>
+        <i class="fas fa-robot chatbot-icon"></i>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Developed by <span>Satyajit Pratihar</span> | AI-Powered Attendance System © 2025</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <link rel="stylesheet" href="chatbot.css">
+    <script src="script.js"></script>
+    <script src="chatbot.js"></script>
+    <script>
+        // Initialize Homepage
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSubjects();
+
+            // Initialize Chatbot
+            if (window.chatbot) {
+                document.querySelector('.ai-chatbot').onclick = window.chatbot.toggle;
+            }
+        });
+
+        // Load Subjects from DataManager
+        function loadSubjects() {
+            const select = document.getElementById('subject');
+            if (!select) return;
+
+            const subjects = DataManager.getSubjects();
+
+            if (subjects.length === 0) {
+                select.innerHTML = '<option value="">No subjects available (Contact Admin)</option>';
+                return;
+            }
+
+            select.innerHTML = '<option value="">Choose a subject...</option>';
+            subjects.forEach(sub => {
+                const option = document.createElement('option');
+                option.value = sub.name;
+                option.textContent = `${sub.name} (${sub.class})`;
+                select.appendChild(option);
+            });
+        }
+
+        // Face Scanning Function
+        async function initiateScanning() {
+            const subject = document.getElementById('subject').value;
+
+            if (!subject) {
+                showToast('⚠️ Please select a subject before initiating scan!', 'warning');
+                return;
+            }
+
+            const scanBtn = document.querySelector('.scan-button');
+            const faceDisplay = document.querySelector('.ai-face-display');
+
+            // Check if already scanning
+            if (document.getElementById('homeScanVideo')) {
+                stopScanning();
+                return;
+            }
+
+            // Start Camera
+            scanBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> STARTING CAMERA...';
+
+            // Create Video Element
+            faceDisplay.innerHTML = `
+                <video id="homeScanVideo" style="width:100%; height:100%; object-fit:cover; border-radius:50%; border: 4px solid var(--neon-blue);" autoplay playsinline></video>
+                <div class="scanning-beam"></div>
+            `;
+
+            const success = await CameraUtils.startCamera('homeScanVideo');
+
+            if (success) {
+                scanBtn.innerHTML = '<i class="fas fa-stop"></i> STOP SCANNING';
+                scanBtn.style.background = 'linear-gradient(135deg, #ff006e, #b24bf3)';
+
+                showToast('📸 Camera Active! Scanning for face...', 'info');
+
+                // Simulate Face Detection & Attendance Marking
+                setTimeout(() => {
+                    simulateFaceDetection(subject);
+                }, 3000);
+            } else {
+                // Revert UI if camera fails
+                resetScannerUI();
+                scanBtn.innerHTML = '<i class="fas fa-camera"></i> INITIATE SCAN';
+            }
+        }
+
+        function stopScanning() {
+            CameraUtils.stopCamera();
+            resetScannerUI();
+            const scanBtn = document.querySelector('.scan-button');
+            scanBtn.innerHTML = '<i class="fas fa-camera"></i> INITIATE SCAN';
+            scanBtn.style.background = 'var(--gradient-primary)';
+        }
+
+        function resetScannerUI() {
+            const faceDisplay = document.querySelector('.ai-face-display');
+            faceDisplay.innerHTML = `
+                <div class="face-outer-ring"></div>
+                <div class="face-middle-ring"></div>
+                <div class="face-inner-ring"></div>
+                <i class="fas fa-user-circle face-icon"></i>
+                <div class="scanning-beam"></div>
+            `;
+        }
+
+        function simulateFaceDetection(subject) {
+            // Randomly pick a student to mark attendance for (Simulation)
+            const students = DataManager.getStudents();
+
+            if (students.length > 0) {
+                const student = students[Math.floor(Math.random() * students.length)];
+
+                // Mark Attendance
+                const record = {
+                    rollNo: student.rollNo,
+                    name: student.name,
+                    subject: subject,
+                    status: 'Present'
+                };
+
+                DataManager.addAttendance(record);
+
+                // Success Feedback
+                showToast(`✅ Face Recognized: ${student.name}`, 'success');
+                showToast(`📅 Attendance Marked for ${subject}`, 'success');
+
+                // Stop after success
+                setTimeout(() => {
+                    stopScanning();
+                }, 2000);
+            } else {
+                showToast('❌ No students registered in database!', 'error');
+                stopScanning();
+            }
+        }
+    </script>
+</body>
+
+</html>
